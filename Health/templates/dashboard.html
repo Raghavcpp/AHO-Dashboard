@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Data Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: #007BFF;
+            color: #fff;
+            padding: 20px 0;
+            margin: 0;
+            transition: background-color 0.3s ease;
+            /* Added transition effect */
+        }
+
+        /* Hover effect for h1 */
+        h1:hover {
+            background-color: #FF5733;
+            /* Change to an interesting color on hover */
+        }
+
+        .loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            color: #333;
+            transition: color 0.3s ease;
+            /* Added transition effect for text color */
+            cursor: pointer;
+            /* Add a pointer cursor on hover */
+        }
+
+        /* Hover effect for h2 */
+        h2:hover {
+            color: #007BFF;
+            /* Change the text color on hover */
+        }
+
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 75%;
+            /* 4:3 aspect ratio (adjust as needed) */
+            overflow: hidden;
+        }
+
+        iframe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-height: 600px;
+            /* Set a maximum height for the iframe */
+        }
+        #back:hover{
+            color: #f0f0f0;
+        }
+
+        .grid-container>div {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loader-wrapper" id="loader-wrapper">
+        <div class="loader"></div>
+    </div>
+
+    <h1>Healthcare Data Dashboard
+        <a id="back" href="../../firebase-login/index.html#open-modal">
+            <span class="glyphicon glyphicon-log-out"></span>
+        </a>
+    </h1>
+
+    <div class="grid-container">
+        <div>
+            <h2>Distribution of Age Based on Stroke Occurrence</h2>
+            <div class="iframe-container">
+                <iframe src="../static/fig_age_distribution.html"></iframe>
+            </div>
+        </div>
+        <div>
+            <h2>Distribution of Work Types</h2>
+            <div class="iframe-container">
+                <iframe src="../static/fig_work_type.html"></iframe>
+            </div>
+        </div>
+        <div>
+            <h2>Distribution of Smoking Status</h2>
+            <div class="iframe-container">
+                <iframe src="../static/fig_smoking_status.html"></iframe>
+            </div>
+        </div>
+        <div>
+            <h2>Distribution of Average Glucose Level</h2>
+            <div class="iframe-container">
+                <iframe src="../static/fig_avg_glucose.html"></iframe>
+            </div>
+        </div>
+        <div>
+            <h2>Number of Stroke Cases Based on Gender</h2>
+            <div class="iframe-container">
+                <iframe src="../static/fig_gender_stroke.html"></iframe>
+            </div>
+        </div>
+    </div>
+    <script>
+        // JavaScript to hide the loader when the page is fully loaded
+        window.addEventListener('load', () => {
+            const loaderWrapper = document.getElementById('loader-wrapper');
+            loaderWrapper.style.display = 'none';
+        });
+    </script>
+
+</body>
+
+</html>

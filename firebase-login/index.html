@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Firebase Login</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#e6511e">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="./css/style.css">
+  <!-- Noty -->
+  <link rel="stylesheet" href="lib/noty/noty.css">
+  <link rel="stylesheet" href="lib/noty/nest.css">
+  <style type="text/css">
+    #user-div {
+      display: none
+    }
+
+    #login-div {
+      display: none
+    }
+
+    #registration-div {
+      display: none
+    }
+
+    #send-verification-div {
+      display: none
+    }
+    .callout {
+  position: fixed;
+  bottom: 35px;
+  right: 20px;
+  margin-left: 20px;
+}
+
+.callout-header {
+  padding: 15px 15px;
+  background: #555;
+  font-size: 20px;
+  color: white;
+}
+
+.callout-container {
+  padding: 15px;
+  background-color: #ccc;
+  color: black
+}
+
+.closebtn {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.closebtn:hover {
+  color: lightgrey;
+}
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row" id="registration-div">
+      <div class="login-box">
+        <h2>Create an Account</h2>
+        <div class="user-box">
+          <input class="form-control" type="email" id="user_email" required="">
+          <label>Email</label>
+        </div>
+        <div class="user-box">
+          <input class="form-control" type="password" id="user_password" required="">
+          <label>Password</label>
+        </div>
+        <div class="user-box">
+          <input class="form-control" type="password" id="confirm_password" required="">
+          <label>Confirm Password</label>
+        </div>
+        <div class="user-box">
+          <a class="button" onclick="myFunction_reload()" class="btn btn-primary float-right">Login</a>
+          <a class="button shift" onclick="registration()" class="btn btn-primary">Register</a>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row" id="send-verification-div">
+      <div class="confirmation-box">
+        <h2>Confirm Email</h2>
+        <div class="user-box">
+          <div id="user_para"></div>
+          <p>To continue, please check your email and verify your account.</p>
+          <a class="button shift" onclick="logout()">Logout</a>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row" id="login-div">
+      <div class="login-box">
+        <h2>Login</h2>
+        <div class="user-box">
+          <input class="form-control" type="email" id="email_field" name="email" id="" required="">
+          <label>Email</label>
+        </div>
+        <div class="user-box">
+          <input class="form-control" type="password" id="password_field" name="password" required="">
+          <label>Password</label>
+        </div>
+        <div class="user-box">
+          <a class="button" onclick="reg_account()">Register</a>
+          <a class="button shift" onclick="login()">Login</a>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row" id="user-div">
+      <div class="user-dashboard">
+        <div class="grid-row">
+          <div class="grid-cell">
+            <h1>Welcome!</h1> <!-- Display username here -->
+            <p>You are currently logged in as <span id="user_email_show">Loading ...</span>.</p>
+          </div>
+        </div>
+        <a class="button shift" href="#open-modal">Dashboard</a>
+        <a class="button shift" onclick="logout()">Logout</a>
+      </div>
+    </div>
+    <div id="open-modal" class="modal-window">
+      <div>
+        <div class="login-box">
+          <a href="#" title="Close" class="modal-close">Close</a>
+          <h1>Select Dashboard</h1>
+          <div class="user-box">
+            <input class="form-control" type="text" id="referenceId_field" name="referenceId" required="">
+            <label>Reference ID</label>
+            <a id="access_reference" class="shift" onclick="protectpasscode()">Access</a>
+          </div>
+        </div>
+      </div><div class="callout">
+        <div class="callout-header">Reference IDs</div>
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">×</span>
+        <div class="callout-container">
+          <p id="referenceIds"></p>
+        </div>
+      </div>
+    </div>
+    <div id="open-modal1" class="modal-window">
+      <div>
+        <div class="login-box">
+          <a href="#" title="Close" class="modal-close">Close</a>
+          <h1>Select Dashboard</h1>
+          <centre>
+            <a class="button shift" id="aviation"
+              onclick="location.href = '../Aviation/templates/dashboard.html';">Aviation</a>
+            <a class="button shift" id="health"
+              onclick="location.href = '../Health/templates/dashboard.html';">Health</a>
+            <a class="button shift" id="oil" onclick="location.href = '../Oil/templates/dashboard.html';">Oil</a>
+          </centre>
+        </div>
+      </div>
+    </div>
+    <div id="open-modal2" class="modal-window">
+      <div>
+        <div class="login-box">
+          <a href="#" title="Close" class="modal-close">Close</a>
+          <h1>Select Dashboard</h1>
+          <centre>
+            <a class="button shift" id="health"
+              onclick="location.href = '../Health/templates/dashboard.html';">Health</a>
+            <a class="button shift" id="oil" onclick="location.href = '../Oil/templates/dashboard.html';">Oil</a>
+          </centre>
+        </div>
+      </div>
+    </div>
+    <div id="open-modal3" class="modal-window">
+      <div>
+        <div class="login-box">
+          <a href="#" title="Close" class="modal-close">Close</a>
+          <h1>Select Dashboard</h1>
+          <centre>
+            <a class="button shift" id="aviation"
+              onclick="location.href = '../Aviation/templates/dashboard.html';">Aviation</a>
+            <a class="button shift" id="oil" onclick="location.href = '../Oil/templates/dashboard.html';">Oil</a>
+          </centre>
+        </div>
+      </div>
+    </div>
+    <div id="open-modal4" class="modal-window">
+      <div>
+        <div class="login-box">
+          <a href="#" title="Close" class="modal-close">Close</a>
+          <h1>Select Dashboard</h1>
+          <centre>
+            <a class="button shift" id="aviation"
+              onclick="location.href = '../Aviation/templates/dashboard.html';">Aviation</a>
+            <a class="button shift" id="health"
+              onclick="location.href = '../Health/templates/dashboard.html';">Health</a>
+          </centre>
+        </div>
+      </div>
+    </div>
+    <div id="open-modal5" class="modal-window">
+      <div>
+        <div class="login-box">
+          <a href="#" title="Close" class="modal-close">Close</a>
+          <h1>Select Dashboard</h1>
+          <centre>
+            <a class="button shift" id="aviation"
+              onclick="location.href = '../Aviation/templates/dashboard.html';">Aviation</a>
+          </centre>
+        </div>
+      </div>
+    </div>
+    <div id="open-modal6" class="modal-window">
+      <div>
+        <div class="login-box">
+          <a href="#" title="Close" class="modal-close">Close</a>
+          <h1>Select Dashboard</h1>
+          <centre>
+            <a class="button shift" id="health"
+              onclick="location.href = '../Health/templates/dashboard.html';">Health</a>
+          </centre>
+        </div>
+      </div>
+    </div>
+    <div id="open-modal7" class="modal-window">
+      <div>
+        <div class="login-box">
+          <a href="#" title="Close" class="modal-close">Close</a>
+          <h1>Select Dashboard</h1>
+          <centre>
+            <a class="button shift" id="oil" onclick="location.href = '../Oil/templates/dashboard.html';">Oil</a>
+          </centre>
+        </div>
+      </div>
+    </div>
+</body>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+  integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+  </script>
+<!-- Bootstrap -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"
+  integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl" crossorigin="anonymous">
+  </script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+  integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
+  </script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-database.js"></script>
+
+<!-- Noty -->
+<link href="lib/noty/noty.css" rel="stylesheet">
+<link href="lib/noty/nest.css" rel="stylesheet">
+<script src="lib/noty/noty.js" type="text/javascript"></script>
+
+<!-- Firebase Config -->
+<script type="text/javascript" src="./js/config/config.js"></script>
+
+<!-- Functions -->
+<script type="text/javascript" src="./js/notification.js"></script>
+<script type="text/javascript" src="./js/login.js"></script>
+<script type="text/javascript" src="./js/logout.js"></script>
+<script type="text/javascript" src="./js/register.js"></script>
+<script type="text/javascript" src="./js/sendVerification.js"></script>
+<script type="text/javascript" src="./js/authState.js"></script>
+
+<script>
+  function registerServiceWorker() {
+    // register sw script in supporting browsers
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js', {
+        scope: '/'
+      }).then(() => {
+        console.log('Service Worker registered successfully.');
+      }).catch(error => {
+        console.log('Service Worker registration failed:', error);
+      });
+    }
+  }
+  function protectpasscode() {
+    const result = document.getElementById("referenceId_field").value;
+
+    if (!result) {
+      alert("Type passcode");
+    } else {
+      // Reference to the Firebase Realtime Database
+      const dbRef = database.ref();
+
+      // Query the database to find the matching panel key
+      dbRef.orderByValue().equalTo(result).once("value", (snapshot) => {
+        const panelKey = Object.keys(snapshot.val())[0];
+        let numericPart = 0;
+        if (panelKey) {
+          numericPart = panelKey.split("_")[1];
+          // Redirect to the corresponding panel using panelKey
+          window.location.hash = `open-modal${numericPart}`;
+
+        } else {
+          alert("Incorrect");
+          location.reload();
+        }
+      });
+      document.getElementById("referenceId_field").value = "";
+    }
+  }
+  registerServiceWorker();
+
+  function first() {
+  const dbRef = database.ref(); // Replace 'database' with your Firebase database reference.
+
+  // Use the 'once' method to fetch the data once.
+  dbRef.once("value")
+    .then((snapshot) => {
+      // Create an array to store the values.
+      const valuesArray = [];
+
+      // Iterate through the child nodes of the snapshot and push each value to the 'valuesArray'.
+      snapshot.forEach((childSnapshot) => {
+        valuesArray.push(childSnapshot.val());
+      });
+
+      // Now, 'valuesArray' contains all the values from the database.
+      console.log(valuesArray);
+
+      // Find the <p> element by its ID
+      const referenceIdsElement = document.getElementById("referenceIds");
+
+      // Create the content based on the array
+      const content = `
+        Admin: ${valuesArray[0]}<br>
+        Client: ${valuesArray.slice(1, 4).join(" , ")}<br>
+        User: ${valuesArray.slice(4).join(" , ")}
+      `;
+
+      // Set the innerHTML of the <p> element with the generated content
+      referenceIdsElement.innerHTML = content;
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+}
+
+first();
+</script>
+
+</html>
