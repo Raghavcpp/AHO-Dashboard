@@ -85,7 +85,7 @@
           <label>Confirm Password</label>
         </div>
         <div class="user-box">
-          <a class="button" onclick="myFunction_reload()" class="btn btn-primary float-right">Login</a>
+          <a class="button" onclick="log_account()" class="btn btn-primary float-right">Login</a>
           <a class="button shift" onclick="registration()" class="btn btn-primary">Register</a>
         </div>
       </div>
@@ -119,6 +119,16 @@
         </div>
       </div>
     </div>
+    <div class="callout">
+      <div class="callout-header">LogIn IDs</div>
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">×</span>
+      <div class="callout-container">
+        <p id="log_details">
+          email: tojow83765@idoidraw.com<br>
+          pass: 123456
+        </p>
+      </div>
+    </div>
     <div class="clearfix"></div>
     <div class="row" id="user-div">
       <div class="user-dashboard">
@@ -143,7 +153,8 @@
             <a id="access_reference" class="shift" onclick="protectpasscode()">Access</a>
           </div>
         </div>
-      </div><div class="callout">
+      </div>
+      <div class="callout">
         <div class="callout-header">Reference IDs</div>
         <span class="closebtn" onclick="this.parentElement.style.display='none';">×</span>
         <div class="callout-container">
@@ -291,68 +302,62 @@
   }
   function protectpasscode() {
     const result = document.getElementById("referenceId_field").value;
-
+    
+    const fielddata = {'admin':'1', 'client-h-o':'2' , 'client-a-o':'3' , 'client-a-h':'4' , 'user-a':'5' , 'user-h':'6' , 'user-o':'7'};
     if (!result) {
       alert("Type passcode");
-    } else {
-      // Reference to the Firebase Realtime Database
-      const dbRef = database.ref();
+    }  
+    else {
 
-      // Query the database to find the matching panel key
-      dbRef.orderByValue().equalTo(result).once("value", (snapshot) => {
-        const panelKey = Object.keys(snapshot.val())[0];
-        let numericPart = 0;
-        if (panelKey) {
-          numericPart = panelKey.split("_")[1];
-          // Redirect to the corresponding panel using panelKey
+        if (fielddata.hasOwnProperty(result.toLowerCase())){
+          numericPart = fielddata[result.toLowerCase()];
           window.location.hash = `open-modal${numericPart}`;
 
         } else {
           alert("Incorrect");
           location.reload();
         }
-      });
+      };
       document.getElementById("referenceId_field").value = "";
     }
-  }
+    // else {
+    //   // Reference to the Firebase Realtime Database
+    //   const dbRef = database.ref();
+
+    //   // Query the database to find the matching panel key
+    //   dbRef.orderByValue().equalTo(result).once("value", (snapshot) => {
+    //     const panelKey = Object.keys(snapshot.val())[0];
+    //     let numericPart = 0;
+    //     if (panelKey) {
+    //       numericPart = panelKey.split("_")[1];
+    //       // Redirect to the corresponding panel using panelKey
+    //       window.location.hash = `open-modal${numericPart}`;
+
+    //     } else {
+    //       alert("Incorrect");
+    //       location.reload();
+    //     }
+    //   });
+    //   document.getElementById("referenceId_field").value = "";
+    // }
   registerServiceWorker();
 
   function first() {
-  const dbRef = database.ref(); // Replace 'database' with your Firebase database reference.
-
-  // Use the 'once' method to fetch the data once.
-  dbRef.once("value")
-    .then((snapshot) => {
       // Create an array to store the values.
-      const valuesArray = [];
-
-      // Iterate through the child nodes of the snapshot and push each value to the 'valuesArray'.
-      snapshot.forEach((childSnapshot) => {
-        valuesArray.push(childSnapshot.val());
-      });
-
-      // Now, 'valuesArray' contains all the values from the database.
-      console.log(valuesArray);
 
       // Find the <p> element by its ID
       const referenceIdsElement = document.getElementById("referenceIds");
 
       // Create the content based on the array
       const content = `
-        Admin: ${valuesArray[0]}<br>
-        Client: ${valuesArray.slice(1, 4).join(" , ")}<br>
-        User: ${valuesArray.slice(4).join(" , ")} <br>
-        change the url open-modal to open-modal1 as the <br> 
-        firebase test period is over. So the reference Ids may not work.
+        Admin: admin <br>
+        Client: client-H-O , client-A-O , client-A-H <br>
+        User: user-A , user-H , user-O 
       `;
 
       // Set the innerHTML of the <p> element with the generated content
       referenceIdsElement.innerHTML = content;
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
-}
+    }
 
 first();
 </script>
